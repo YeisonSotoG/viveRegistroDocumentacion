@@ -1,16 +1,30 @@
+#include <dht.h>
+dht DHT;
+#define DHT11_PIN 8
+
 void setup() {
+  //Voltaje en el cual se leerá la información
   Serial.begin(9600);
 }
 
 void loop() {
-  
+  DHT.read11(DHT11_PIN);
+  //TEMPERATURA//
+  //Definimos las variables de humedad y lluvia
+  //Le asignamos a lluvia el valor de la entrada analogica A0
   int v_lluvia = analogRead(A0);
+  //Le asignamos a humedad el valor de la entrada analogica A2
   int v_humedad = analogRead(A2);
+  int v_humedadPorcentaje = map(v_humedad, 0 , 1023, 170,0);
+  int v_temperatura = DHT.temperature;
 
-  String lluvia = String(v_lluvia) + "," + String(v_humedad);
-  
-  Serial.println(lluvia);
-  
-  delay(6000);
+  //En una variable, guardamos el valor de lluvia y humedad
+  //A su vez, transformamos estos dos en Strings para concatenarlos
+  String sensores = String(v_lluvia) + "," + String(v_humedad) + "," + String(v_humedadPorcentaje) + "," + String(v_temperatura) ;
+
+  //Los imprimimos en el monitor serial
+  Serial.println(sensores);
+  //Le damos un tiempo de 4000 milisegundos/4 segundos de espera
+  delay(5000);
 
 }
